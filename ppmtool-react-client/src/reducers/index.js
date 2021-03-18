@@ -1,3 +1,7 @@
 import { combineReducers } from "redux";
+import errorReducer from "./errorReducer";
 
-export default combineReducers({}); // will take an object that contains all the reducers
+// will take an object that contains all the reducers
+export default combineReducers({
+  errors: errorReducer,
+});
