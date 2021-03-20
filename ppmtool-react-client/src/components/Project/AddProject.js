@@ -67,7 +67,7 @@ class AddProject extends Component {
           //check state change in the react extension
         }
 
-        <div className="register">
+        <div className="project">
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
