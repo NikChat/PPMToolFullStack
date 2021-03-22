@@ -3,8 +3,10 @@ package com.nikchat.ppmtool.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nikchat.ppmtool.domain.Backlog;
 import com.nikchat.ppmtool.domain.Project;
 import com.nikchat.ppmtool.exceptions.ProjectIdException;
+import com.nikchat.ppmtool.repositories.BacklogRepository;
 import com.nikchat.ppmtool.repositories.ProjectRepository;
 
 @Service
@@ -12,11 +14,27 @@ public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+    
+    @Autowired
+    private BacklogRepository backlogRepository;
 
     public Project saveOrUpdateProject(Project project){
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            
+            if(project.getId()==null){ // When creating new project, create a new backlog for it
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }
+
+            if(project.getId()!=null){ // When updating an existing project
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+            }
+            
             return projectRepository.save(project);
+            
         }catch (Exception e){
             throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
         }
