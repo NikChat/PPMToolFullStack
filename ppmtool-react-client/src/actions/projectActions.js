@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, GET_PROJECTS, GET_PROJECT } from "./types";
+import { GET_ERRORS, GET_PROJECTS, GET_PROJECT, DELETE_PROJECT } from "./types";
 
 /*** CREATE PROJECT ***/
 export const createProject = (project, history) => async (dispatch) => {
@@ -39,5 +39,20 @@ export const getProject = (id, history) => async (dispatch) => {
     });
   } catch (error) {
     history.push("/dashboard");
+  }
+};
+
+/*** DELETE PROJECT ***/
+export const deleteProject = (id) => async (dispatch) => {
+  if (
+    window.confirm(
+      "Are you sure? This will delete the project and all the data related to it"
+    )
+  ) {
+    await axios.delete(`http://localhost:8080/api/project/${id}`);
+    dispatch({
+      type: DELETE_PROJECT,
+      payload: id,
+    });
   }
 };
