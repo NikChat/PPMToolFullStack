@@ -1,5 +1,7 @@
 package com.nikchat.ppmtool.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +105,19 @@ public class ProjectTaskService {
         projectTask = updatedTask;
 
         return projectTaskRepository.save(projectTask);
+    }
+    
+    
+    public void deletePTByProjectSequence(String backlog_id, String pt_id){
+    	
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id);
+
+//        Backlog backlog = projectTask.getBacklog();
+//        List<ProjectTask> pts = backlog.getProjectTasks();
+//        pts.remove(projectTask);
+//        backlogRepository.save(backlog);
+
+        projectTaskRepository.delete(projectTask);
     }
     
 }
