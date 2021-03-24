@@ -56,7 +56,7 @@ public class ProjectController {
     	return projectService.findAllProjects();
     }
     
-    
+    /*  Deletes a Project, the Backlog, and all the ProjectTasks associated with it  */
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId){
         projectService.deleteProjectByIdentifier(projectId);
