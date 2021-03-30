@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nikchat.ppmtool.domain.User;
 import com.nikchat.ppmtool.services.MapValidationErrorService;
 import com.nikchat.ppmtool.services.UserService;
+import com.nikchat.ppmtool.validator.UserValidator;
 
 import javax.validation.Valid;
 
@@ -24,10 +25,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private UserValidator userValidator;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
         // Validate passwords match
+    	userValidator.validate(user,result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if(errorMap != null) return errorMap;

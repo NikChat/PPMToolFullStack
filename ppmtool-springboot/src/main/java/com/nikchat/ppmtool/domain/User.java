@@ -3,6 +3,7 @@ package com.nikchat.ppmtool.domain;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ public class User implements UserDetails {
     private String fullName;
     
     @NotBlank(message = "Password field is required")
+//    @Size(min=6, message = "Password must be at least 6 characters")
     private String password;
     
     @Transient
