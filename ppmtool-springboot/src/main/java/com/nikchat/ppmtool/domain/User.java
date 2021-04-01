@@ -9,8 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class User implements UserDetails {
@@ -38,7 +40,10 @@ public class User implements UserDetails {
     private Date update_At;
 
     //OneToMany with Project
-
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
+    
+    
     public Long getId() {
         return id;
     }
@@ -106,6 +111,14 @@ public class User implements UserDetails {
     @PreUpdate
     protected void onUpdate(){
         this.update_At = new Date();
+    }
+    
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
     
     /* UserDetails interface methods: */

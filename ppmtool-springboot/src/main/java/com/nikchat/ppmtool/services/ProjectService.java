@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 
 import com.nikchat.ppmtool.domain.Backlog;
 import com.nikchat.ppmtool.domain.Project;
+import com.nikchat.ppmtool.domain.User;
 import com.nikchat.ppmtool.exceptions.ProjectIdException;
 import com.nikchat.ppmtool.repositories.BacklogRepository;
 import com.nikchat.ppmtool.repositories.ProjectRepository;
+import com.nikchat.ppmtool.repositories.UserRepository;
 
 @Service
 public class ProjectService {
@@ -17,9 +19,17 @@ public class ProjectService {
     
     @Autowired
     private BacklogRepository backlogRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+    
 
-    public Project saveOrUpdateProject(Project project){
+    public Project saveOrUpdateProject(Project project, String username){
         try{
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
+
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             
             if(project.getId()==null){ // When creating new project, create a new backlog for it
@@ -43,6 +53,8 @@ public class ProjectService {
     
 
     public Project findProjectByIdentifier(String projectId){
+    	
+    	//Only want to return the project if the user looking for it is the owner
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
