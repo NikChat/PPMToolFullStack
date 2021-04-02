@@ -43,8 +43,8 @@ public class ProjectTaskService {
             backlog.setPTSequence(backlogSequence);
             
             //Add Sequence to ProjectTask
-            projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence); // backlog.getProjectIdentifier()
-            projectTask.setProjectIdentifier(projectIdentifier);
+            projectTask.setProjectSequence(backlog.getProjectIdentifier()+"-"+backlogSequence); // backlog.getProjectIdentifier()
+            projectTask.setProjectIdentifier(backlog.getProjectIdentifier());
 
             //INITIAL priority when priority null
             if(projectTask.getPriority()==null || projectTask.getPriority()==0){ // we need projectTask.getPriority()== 0 to handle the form
@@ -82,8 +82,8 @@ public class ProjectTaskService {
         }
 
         //make sure that the backlog/project id in the path corresponds to the right project
-        if(!projectTask.getProjectIdentifier().equals(backlog_id)){
-            throw new ProjectNotFoundException("Project Task '"+pt_id+"' does not exist in project: '"+backlog_id);
+        if(!projectTask.getProjectIdentifier().equals(backlog_id.toUpperCase())){
+            throw new ProjectNotFoundException("Project Task '"+pt_id+"' does not exist in project: '"+backlog_id.toUpperCase());
         }
 
         return projectTask;
