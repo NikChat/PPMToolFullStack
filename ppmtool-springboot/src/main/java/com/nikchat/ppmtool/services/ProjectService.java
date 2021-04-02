@@ -7,6 +7,7 @@ import com.nikchat.ppmtool.domain.Backlog;
 import com.nikchat.ppmtool.domain.Project;
 import com.nikchat.ppmtool.domain.User;
 import com.nikchat.ppmtool.exceptions.ProjectIdException;
+import com.nikchat.ppmtool.exceptions.ProjectNotFoundException;
 import com.nikchat.ppmtool.repositories.BacklogRepository;
 import com.nikchat.ppmtool.repositories.ProjectRepository;
 import com.nikchat.ppmtool.repositories.UserRepository;
@@ -52,7 +53,7 @@ public class ProjectService {
     }
     
 
-    public Project findProjectByIdentifier(String projectId){
+    public Project findProjectByIdentifier(String projectId, String username){
     	
     	//Only want to return the project if the user looking for it is the owner
 
@@ -62,23 +63,20 @@ public class ProjectService {
             throw new ProjectIdException("Project ID '"+projectId+"' does not exist");
 
         }
+        
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
 
         return project;
     }
     
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
-    }
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
+    }    
     
-    
-    public void deleteProjectByIdentifier(String projectid){
-        Project project = projectRepository.findByProjectIdentifier(projectid.toUpperCase());
-
-        if(project == null){
-            throw  new  ProjectIdException("Cannot Delete Project with ID '"+projectid+"'. This project does not exist");
-        }
-
-        projectRepository.delete(project);
+    public void deleteProjectByIdentifier(String projectid, String username){
+        projectRepository.delete(findProjectByIdentifier(projectid, username));
     }
 
 }
