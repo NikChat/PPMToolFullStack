@@ -18,6 +18,12 @@ class Login extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.security.validToken) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   // redirect to /dashboard after login:
   componentWillReceiveProps(nextProps) {
     if (nextProps.security.validToken) {
